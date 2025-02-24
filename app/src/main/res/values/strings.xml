@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">VideoTestTask</string>
+    <string name="empty_list">-</string>
+    <string name="retry">Перезагрузить\n</string>
+    <string name="loading_error">Ошибка загрузки</string>
+    <string name="empty">-\n</string>
+</resources>
