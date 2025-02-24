@@ -8,6 +8,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.util.EventLogger
 import com.example.videotesttask.domain.LoadingState
 import com.example.videotesttask.domain.usecases.ContentUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +33,8 @@ class ContentViewModel(
         }
     }
     private val exoPlayer: ExoPlayer by lazy {
-        ExoPlayer.Builder(context).build().apply {
+        ExoPlayer.Builder(context).build()
+            .apply {
             addListener(object : Player.Listener {
                 override fun onPlayerError(error: PlaybackException) {
                     Log.e("FAFWA", "Error: ${error.message}")
@@ -42,6 +44,8 @@ class ContentViewModel(
     }
     fun setMediaItem(mediaItem: MediaItem) {
         Log.d("FAFWA", "vm set")
+        exoPlayer.addAnalyticsListener(EventLogger())
+
         exoPlayer.setMediaItem(mediaItem)
         Log.d("FAFWA", "vm prepare")
         exoPlayer.prepare()

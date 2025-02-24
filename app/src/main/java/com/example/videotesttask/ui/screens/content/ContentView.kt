@@ -64,7 +64,9 @@ fun ContentView(viewModel: ContentViewModel, item: Item) {
                 } else {
                     Log.d("FAFWA", videos[0])
                     val mediaItem = remember(videos) {
-                        MediaItem.fromUri(videos[0])
+                        val uri = if (videos[0].contains("https")) videos[0]
+                        else videos[0].replace("http", "https")
+                        MediaItem.fromUri(uri)
                     }
 
                     LaunchedEffect(mediaItem) {
