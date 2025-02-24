@@ -1,12 +1,13 @@
 package com.example.videotesttask.ui.screens.content
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.test.core.app.ApplicationProvider
 import com.example.videotesttask.domain.LoadingState
 import com.example.videotesttask.domain.usecases.ContentUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,11 +32,18 @@ class ContentViewModel(
         }
     }
     private val exoPlayer: ExoPlayer by lazy {
-        ExoPlayer.Builder(context).build()
+        ExoPlayer.Builder(context).build().apply {
+            addListener(object : Player.Listener {
+                override fun onPlayerError(error: PlaybackException) {
+                    Log.e("FAFWA", "Error: ${error.message}")
+                }
+            })
+        }
     }
-    fun setMediaItem(uri: String) {
-        val mediaItem = MediaItem.fromUri(uri)
+    fun setMediaItem(mediaItem: MediaItem) {
+        Log.d("FAFWA", "vm set")
         exoPlayer.setMediaItem(mediaItem)
+        Log.d("FAFWA", "vm prepare")
         exoPlayer.prepare()
     }
 

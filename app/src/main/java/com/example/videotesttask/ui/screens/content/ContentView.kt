@@ -1,5 +1,6 @@
 package com.example.videotesttask.ui.screens.content
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -61,12 +62,14 @@ fun ContentView(viewModel: ContentViewModel, item: Item) {
                 if (videos.isNullOrEmpty()) {
                     Text("Видеофайлы не найдены")
                 } else {
+                    Log.d("FAFWA", videos[0])
                     val mediaItem = remember(videos) {
                         MediaItem.fromUri(videos[0])
                     }
 
                     LaunchedEffect(mediaItem) {
-                        viewModel.setMediaItem(mediaItem.mediaId)
+                        Log.d("FAFWA", "mi ${mediaItem.mediaId}")
+                        viewModel.setMediaItem(mediaItem)
                     }
 
                     AndroidView(

@@ -1,5 +1,6 @@
 package com.example.videotesttask.data.local.room.store
 
+import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import androidx.paging.PagingSource
 import com.example.videotesttask.data.local.room.database.VideoDatabase
@@ -16,6 +17,10 @@ class VideoStoreImpl (
 
     override suspend fun insertItems(elements: List<ItemEntity>) {
         Log.d("JLTS", "store $elements")
-        items.insertAllItems(elements)
+        try {
+            items.insertAllItems(elements)
+        } catch (e: SQLiteConstraintException) {
+            Log.e("FAFWA", "Duplicate item(s)")
+        }
     }
 }

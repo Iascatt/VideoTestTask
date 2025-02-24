@@ -33,9 +33,10 @@ fun FeedView(viewModel: FeedViewModel) {
             previews.let {
                 if (it.loadState.refresh is LoadState.NotLoading) {
                     items(previews.itemCount) { index ->
-                        if (previews[index] != null)
+                        if (previews[index] != null) {
                             Log.d("JLTS", "fview: ${previews[index]!!}")
                             PreviewCard(previews[index]!!)
+                        }
                     }
                     if (it.loadState.append is LoadState.Loading) {
                         item {
