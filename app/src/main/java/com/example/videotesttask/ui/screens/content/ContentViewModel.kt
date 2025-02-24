@@ -1,12 +1,9 @@
 package com.example.videotesttask.ui.screens.content
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
-import androidx.media3.common.PlaybackException
-import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.util.EventLogger
 import com.example.videotesttask.domain.LoadingState
@@ -15,14 +12,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class ContentViewModel(
     private val contentUseCase: ContentUseCase,
-    private val context: Context
-) : ViewModel() {
+) : ViewModel(), KoinComponent {
 
     private var _videoState: MutableStateFlow<LoadingState<List<String>>> = MutableStateFlow(LoadingState.Loading())
     var videoState: StateFlow<LoadingState<List<String>>> = _videoState.asStateFlow()
+    private val exoPlayer: ExoPlayer by inject()
 
     fun getVideos(uri: String){
         viewModelScope.launch {
@@ -32,16 +31,8 @@ class ContentViewModel(
                 }
         }
     }
-    private val exoPlayer: ExoPlayer by lazy {
-        ExoPlayer.Builder(context).build()
-            .apply {
-            addListener(object : Player.Listener {
-                override fun onPlayerError(error: PlaybackException) {
-                    Log.e("FAFWA", "Error: ${error.message}")
-                }
-            })
-        }
-    }
+
+
     fun setMediaItem(mediaItem: MediaItem) {
         Log.d("FAFWA", "vm set")
         exoPlayer.addAnalyticsListener(EventLogger())

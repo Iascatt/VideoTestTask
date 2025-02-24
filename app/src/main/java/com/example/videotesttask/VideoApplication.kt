@@ -2,6 +2,7 @@ package com.example.videotesttask
 
 import android.app.Application
 import com.example.videotesttask.di.dataModule
+import com.example.videotesttask.di.playerModule
 import com.example.videotesttask.di.useCasesModule
 import com.example.videotesttask.di.viewModelsModule
 import org.koin.android.ext.koin.androidContext
@@ -15,7 +16,7 @@ class VideoApplication : Application() {
         GlobalContext.startKoin {
             androidLogger()
             androidContext(this@VideoApplication)
-            modules(dataModule, useCasesModule, viewModelsModule)
+            modules(dataModule, useCasesModule, viewModelsModule, playerModule)
         }
     }
 }
