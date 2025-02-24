@@ -1,5 +1,6 @@
 package com.example.videotesttask.ui.screens.content
 
+import android.content.Context
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +15,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ContentViewModel(
-    private val contentUseCase: ContentUseCase
+    private val contentUseCase: ContentUseCase,
+    private val context: Context
 ) : ViewModel() {
 
     private var _videoState: MutableStateFlow<LoadingState<List<String>>> = MutableStateFlow(LoadingState.Loading())
@@ -29,7 +31,7 @@ class ContentViewModel(
         }
     }
     private val exoPlayer: ExoPlayer by lazy {
-        ExoPlayer.Builder(ApplicationProvider.getApplicationContext()).build()
+        ExoPlayer.Builder(context).build()
     }
     fun setMediaItem(uri: String) {
         val mediaItem = MediaItem.fromUri(uri)
