@@ -1,6 +1,5 @@
 package com.example.videotesttask.ui.screens.content
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
@@ -22,6 +21,8 @@ class ContentViewModel(
     private var _videoState: MutableStateFlow<LoadingState<List<String>>> = MutableStateFlow(LoadingState.Loading())
     var videoState: StateFlow<LoadingState<List<String>>> = _videoState.asStateFlow()
     private val exoPlayer: ExoPlayer by inject()
+    var savedPosition: Long? = null
+
 
     fun getVideos(uri: String){
         viewModelScope.launch {
@@ -32,20 +33,21 @@ class ContentViewModel(
         }
     }
 
-
     fun setMediaItem(mediaItem: MediaItem) {
-        Log.d("FAFWA", "vm set")
         exoPlayer.addAnalyticsListener(EventLogger())
-
         exoPlayer.setMediaItem(mediaItem)
-        Log.d("FAFWA", "vm prepare")
         exoPlayer.prepare()
     }
 
     fun getPlayer(): ExoPlayer {
         return exoPlayer
     }
-
+    fun savePlayerState() {
+        savedPosition = exoPlayer.currentPosition
+    }
+    fun restorePlayer() {
+        savedPosition?.let { exoPlayer.seekTo(it) }
+    }
     override fun onCleared() {
         super.onCleared()
         exoPlayer.release()
